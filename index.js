@@ -1,7 +1,7 @@
 // index.js
 // where your node app starts
 
-var utils = require('./utils');
+import('./utils');
 
 // init project
 var express = require('express');

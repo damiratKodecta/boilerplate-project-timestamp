@@ -1,3 +1,5 @@
+
+
 function checkStringIfNumber(string) {
     return !Number.isNaN(string);
 }
