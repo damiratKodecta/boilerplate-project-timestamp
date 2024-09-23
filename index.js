@@ -17,13 +17,23 @@ app.get("/", function (req, res) {
 
 
 // your first API endpoint... 
-app.get("/api/hello", function (req, res) {
-  res.json({greeting: 'hello API'});
+app.get("/api", function (req, res) {
+  const d = new Date();
+  return res.json(
+    {
+      //"status": "OK",
+      unix: Date.parse(d), 
+      utc: d.toISOString()}
+  );  
 });
 
 
 // /api/2015-12-25
 app.get("/api/:date", function (req, res) {
+
+  if (!req.params){
+    console.log('return now()');
+  }
 
   console.log(req.params.date);
     
@@ -33,8 +43,8 @@ app.get("/api/:date", function (req, res) {
       return res.json(
       {
         //"status": "OK",
-        "unix": Date.parse(d), 
-        "utc": d.toISOString()}
+        unix: Date.parse(d), 
+        utc: d.toISOString()}
     );  
   }
 
@@ -42,9 +52,9 @@ app.get("/api/:date", function (req, res) {
     const d = new Date(req.params.date*1000);
     return res.json(
       {
-        "status": "OK",
-        "unix": Date.parse(d), 
-        "utc": d.toISOString()}
+        //"status": "OK",
+        unix: Date.parse(d), 
+        utc: d.toISOString()}
     );  
   }
 
