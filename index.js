@@ -50,7 +50,8 @@ app.get("/api/:date", function (req, res) {
 
   return res.json(
     {
-      "status":"Error in parameter, should be yyyy-[m]m-[d]d, you have provided " + req.params.date
+      //"status":"Error in parameter, should be yyyy-[m]m-[d]d, you have provided " + req.params.date
+      error : "Invalid Date" 
     }
   );
   
