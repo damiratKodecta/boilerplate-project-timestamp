@@ -1,6 +1,8 @@
 // index.js
 // where your node app starts
 
+var utils = require('./utils');
+
 // init project
 var express = require('express');
 var app = express();
@@ -29,12 +31,25 @@ app.get("/api/hello", function (req, res) {
 app.get("/api/:date", function (req, res) {
 
   console.log(req.params.date);
-  
-  res.json(
+
+  const dateObject = req.params.date.split('-');
+  console.log('utils.checkStringIfNumber(dateObject[0])', utils.checkStringIfNumber(dateObject[0]));
+  if (utils.checkStringIfNumber(dateObject[0]) && utils.checkStringIfNumber(dateObject[1]) && utils.checkStringIfNumber(dateObject[0])  ) 
     {
-      "unix":1451001600000, 
-      "utc":"Fri, 25 Dec 2015 00:00:00 GMT"}
+      return res.json(
+      {
+        "unix":1451001600000, 
+        "utc":"Fri, 25 Dec 2015 00:00:00 GMT"}
+    );  
+  }
+
+  return res.json(
+    {
+      "startus":"Error in parameter, should be yyyy-mm-dd"
+    }
   );
+  
+  
 });
 
 
