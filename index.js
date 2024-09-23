@@ -17,55 +17,23 @@ app.get("/", function (req, res) {
 
 
 // your first API endpoint... 
-app.get("/api", function (req, res) {
-  const d = new Date();
-  return res.json(
-    {
-      //"status": "OK",
-      unix: Date.parse(d), 
-      utc: d.toISOString()}
-  );  
+app.get("/api", (req, res) => {
+  const now = new Date();
+  res.json({ 
+    unix: now.getTime(), 
+    utc: now.toUTCString() })
 });
 
+app.get("/api/:date", (req, res) => {
+  const paramsDate = req.params.date;
+  const invalidDate = "Invalid Date";
+  const date = parseInt(paramsDate) < 10000
+      ? new Date(paramsDate)
+      : new Date(parseInt(paramsDate))
 
-// /api/2015-12-25
-app.get("/api/:date", function (req, res) {
-
-  if (!req.params){
-    console.log('return now()');
-  }
-
-  console.log(req.params.date);
-    
-  if ( isValidDateFormat(req.params.date)  ) 
-    {
-      const d = new Date(req.params.date);
-      return res.json(
-      {
-        //"status": "OK",
-        unix: Date.parse(d), 
-        utc: d.toISOString()}
-    );  
-  }
-
-  if (isValidTimestamp(req.params.date)) {
-    const d = new Date(req.params.date*1000);
-    return res.json(
-      {
-        //"status": "OK",
-        unix: Date.parse(d), 
-        utc: d.toISOString()}
-    );  
-  }
-
-  return res.json(
-    {
-      //"status":"Error in parameter, should be yyyy-[m]m-[d]d, you have provided " + req.params.date
-      error : "Invalid Date" 
-    }
-  );
-  
-  
+  date.toString() === invalidDate
+      ? res.json({ error: invalidDate })
+      : res.json({ unix: date.valueOf(), utc: date.toUTCString() });
 });
 
 
