@@ -1,8 +1,3 @@
-// index.js
-// where your node app starts
-
-import('./utils');
-
 // init project
 var express = require('express');
 var app = express();
@@ -32,14 +27,13 @@ app.get("/api/:date", function (req, res) {
 
   console.log(req.params.date);
 
-  const dateObject = req.params.date.split('-');
-  console.log('utils.checkStringIfNumber(dateObject[0])', utils.checkStringIfNumber(dateObject[0]));
-  if (utils.checkStringIfNumber(dateObject[0]) && utils.checkStringIfNumber(dateObject[1]) && utils.checkStringIfNumber(dateObject[0])  ) 
+  
+  if ( isValidDateFormat(req.params.date)  ) 
     {
       return res.json(
       {
-        "unix":1451001600000, 
-        "utc":"Fri, 25 Dec 2015 00:00:00 GMT"}
+        "unix":req.params.date, 
+        "utc":req.params.date}
     );  
   }
 
@@ -59,3 +53,10 @@ app.get("/api/:date", function (req, res) {
 var listener = app.listen(process.env.PORT || 3000, function () {
   console.log('Your app is listening on port ' + listener.address().port);
 });
+
+// Validate YYYY-MM-DD format
+function isValidDateFormat(dateString) {
+  const regex = /^\d{4}-\d{2}-\d{2}$/;
+  return dateString.match(regex) !== null;
+}
+

@@ -5,3 +5,4 @@ function checkStringIfNumber(string) {
 }
 
 exports.checkStringIfNumber = checkStringIfNumber;
+
