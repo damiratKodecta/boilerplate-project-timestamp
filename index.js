@@ -26,20 +26,31 @@ app.get("/api/hello", function (req, res) {
 app.get("/api/:date", function (req, res) {
 
   console.log(req.params.date);
-
-  
+    
   if ( isValidDateFormat(req.params.date)  ) 
     {
+      const d = new Date(req.params.date);
       return res.json(
       {
-        "unix":req.params.date, 
-        "utc":req.params.date}
+        //"status": "OK",
+        "unix": Date.parse(d), 
+        "utc": d.toISOString()}
+    );  
+  }
+
+  if (isValidTimestamp(req.params.date)) {
+    const d = new Date(req.params.date*1000);
+    return res.json(
+      {
+        "status": "OK",
+        "unix": Date.parse(d), 
+        "utc": d.toISOString()}
     );  
   }
 
   return res.json(
     {
-      "startus":"Error in parameter, should be yyyy-mm-dd"
+      "status":"Error in parameter, should be yyyy-[m]m-[d]d, you have provided " + req.params.date
     }
   );
   
@@ -47,16 +58,23 @@ app.get("/api/:date", function (req, res) {
 });
 
 
-
-
 // Listen on port set in environment variable or default to 3000
 var listener = app.listen(process.env.PORT || 3000, function () {
   console.log('Your app is listening on port ' + listener.address().port);
 });
 
-// Validate YYYY-MM-DD format
+// Validate YYYY-[M]M-[D]D format
 function isValidDateFormat(dateString) {
-  const regex = /^\d{4}-\d{2}-\d{2}$/;
-  return dateString.match(regex) !== null;
+  const regex = /^\d{4}-\d{1,2}-\d{1,2}$/;
+  const valid = dateString.match(regex) !== null;
+  console.log('valid date format:' + valid);
+  return valid;
 }
 
+//Validate timestamp
+function isValidTimestamp(stampString) {
+  const valid = (new Date(stampString*1000)).getTime() > 0;
+  console.log('valid timestamp:' + valid);
+return valid;
+
+}
